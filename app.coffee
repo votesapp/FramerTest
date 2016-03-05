@@ -132,7 +132,7 @@ zoomLevel = 0
 zoomcontainer = new ScrollComponent
 	height: Screen.height 
 	width: Screen.width 
-	backgroundColor: 'yellow'
+	backgroundColor: 'lightcyan'
 zoomcontainer.scrollHorizontal = false
 zoomcontainer.scrollVertical = false
 zoomcontainer.pinchable.enabled = true
@@ -148,7 +148,7 @@ scrollcontainer = new ScrollComponent
 	height: Screen.height
 	width: Screen.width
 	parent: zoomcontainer.content 
-	backgroundColor: 'yellow'
+	backgroundColor: 'lightcyan'
 	scrollHorizontal: true
 	scrollVertical: false
 scrollcontainer.contentInset =
@@ -180,8 +180,6 @@ scrollcontainer.on Events.DoubleTap, (event) ->
    			x: event.offsetX * zoomcontainer.scale
    			y: event.offsetY * zoomcontainer.scale
 		)
-		
-# 		closestContentLayer(event.offsetX *  1 / zoomcontainer.scale,event.offsetX * 1/≈ )
 
 		scrollcontainer.scrollToLayer(
  		   closest_card
@@ -275,9 +273,12 @@ rearrange = (currentCard, currentMove = false) ->
 # 					print currentMove.x
 # 					i = i + 1
 # 					alert 'jaaaaaaa'
+				
+				
 				card.animate 
 					properties:
 						x: 650 * i
+						#backgroundColor: if i == 2 then 'blue' else if i < 2 then 'green' else 'red'
 					time: 0.1
 				i=i+1
 		
@@ -288,16 +289,13 @@ render = (currentCard) ->
 # 		print card
 # 		card.destroy()
 	
-# 	zoomcontainer.scale = 0.05	
-# 	zoomcontainer.animate
-#     	properties:
-#     	    scale: 1
-#     	    #rotation: 90
-#    	 time: 1
-    
 	i = 0
 	cards = []
+	rendered_cards = []
 	for data in currentCard.cards
+		
+		colors = ['slateblue','skyblue','royalblue','powderblue','darkturquoise','navy','midnightblue','mediumblue','dodgeblue']
+
 		
 		test = new Layer
 			name: data.name
@@ -306,10 +304,14 @@ render = (currentCard) ->
 			html: "<br>&nbsp;&nbsp;#{data.name} (#{if data.cards then data.cards.length else '0'}) ||| #{data.myVote}"
 			x:  i * 650 #125
 			y: 2100 #250
+			z: 10
 			width: 600 #100
 			height: 1000 #150
 			borderRadius: 20
-			backgroundColor: "#28affa"		
+			backgroundColor: colors[i]	
+			
+		rendered_cards.push test
+		
 		
 		
 		do(test) ->
@@ -339,7 +341,6 @@ render = (currentCard) ->
 			test.on Events.DragEnd, (event, draggable, layer) ->
 						
 				#rearrange(currentCard)
-				print 'aja'
 				
 				layer.animate
 					properties:
@@ -369,6 +370,17 @@ render = (currentCard) ->
 				
 				
 		i = i + 1
+	
+
+	
+# 	scrollcontainer.scrollToLayer(
+# 		rendered_cards[0]
+# 		0.5, 0.5
+# 		true
+# 	)
+
+
+
 
 render(currentCard)
 
@@ -379,6 +391,24 @@ Utils.interval 1, ->
 				y: card.level * 1050
 			time: 0.1	
 	
+
+layerA = new Layer
+layerA.backgroundColor = 'lightgreen'
+layerA.height=2275
+layerA.width = 10000
+layerA.x = -200
+layerA.y = -200
+layerA.parent = scrollcontainer.content
+
+layerB = new Layer
+layerB.backgroundColor = 'lightpink'
+layerB.y = 3130
+layerB.x = -200
+layerB.height=10000
+layerB.width = 10000
+layerB.parent = scrollcontainer.content
+
+
 
 
 # zoomcontainer.on Events.zoomcontainerEnd, (event, draggable, layer) ->
